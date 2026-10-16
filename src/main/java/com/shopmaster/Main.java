@@ -2,6 +2,7 @@ package com.shopmaster;
 
 import com.shopmaster.catalogo.Combo;
 import com.shopmaster.catalogo.Producto;
+import com.shopmaster.pago.StripeUSA;
 import com.shopmaster.pedido.EmpaqueRegalo;
 import com.shopmaster.pedido.GarantiaExtendida;
 import com.shopmaster.pedido.ManejoFragil;
@@ -31,25 +32,26 @@ public class Main {
         System.out.println("Total catalogo: $" + (long) comboGamer.getPrecio());
         System.out.println();
 
-        // Pedido base
+        // Pedido con extras (Decorator)
         Pedido pedido = new PedidoBase(comboGamer);
-        System.out.println("=== Pedido base ===");
-        System.out.println(pedido.getDescripcion() + " -> $" + (long) pedido.getCosto());
-        System.out.println();
-
-        // Caso tipico del enunciado: garantia + empaque (Decorator)
-        // Orden: primero garantia (10% sobre base), luego empaque (+15000)
         pedido = new GarantiaExtendida(pedido);
         pedido = new EmpaqueRegalo(pedido);
 
-        System.out.println("=== Pedido con Garantia + Empaque ===");
+        System.out.println("=== Pedido con extras (Decorator) ===");
         System.out.println(pedido.getDescripcion());
-        System.out.println("Costo final: $" + (long) pedido.getCosto());
+        System.out.println("Costo final: $" + (long) pedido.getCosto() + " COP");
         System.out.println();
 
-        // Demo de otro extra y de apilar en otro orden
+        // Demo StripeUSA: API externa incompatible con ProcesadorPago
+        // ShopMaster necesita cobrarEnPesos(...); Stripe solo tiene chargeInDollars(...)
+        System.out.println("=== Demo StripeUSA (API externa, sin adapter todavia) ===");
+        StripeUSA stripe = new StripeUSA();
+        stripe.chargeInDollars(100.0, "prueba@shopmaster.com", "mk_test_shopmaster");
+
+        // Demo otro extra
         Pedido pedidoFragil = new PedidoBase(new Producto("Servidor Empresarial", 6000000));
         pedidoFragil = new ManejoFragil(pedidoFragil);
+        System.out.println();
         System.out.println("=== Demo Manejo Fragil ===");
         System.out.println(pedidoFragil.getDescripcion() + " -> $" + (long) pedidoFragil.getCosto());
     }
