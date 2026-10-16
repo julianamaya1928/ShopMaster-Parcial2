@@ -4,13 +4,20 @@ import com.shopmaster.catalogo.Combo;
 import com.shopmaster.catalogo.Producto;
 import com.shopmaster.facade.CompraRapidaFacade;
 
+/**
+ * Punto de entrada. Los 3 escenarios de prueba del parcial
+ * estan programados aqui (sin Scanner).
+ * Toda la complejidad se delega a la Facade.
+ */
 public class Main {
 
     public static void main(String[] args) {
-        // Un solo punto de entrada (Facade). El Main ya no arma adapter ni proxy.
         CompraRapidaFacade compra = new CompraRapidaFacade();
 
-        // Demo 1: compra exitosa con garantia y empaque
+        // --------------------------------------------------
+        // Caso de Prueba 1 (Compra Exitosa Completa)
+        // Combo + sub-combo, usuario valido, garantia + empaque
+        // --------------------------------------------------
         Combo kitLimpieza = new Combo("Kit de Limpieza");
         kitLimpieza.agregar(new Producto("Limpia pantallas", 25000));
         kitLimpieza.agregar(new Producto("Panos de microfibra", 15000));
@@ -21,27 +28,33 @@ public class Main {
         comboGamer.agregar(kitLimpieza);
 
         compra.ejecutarCompraRapida(
-                "Demo 1 - Compra exitosa",
+                "Caso de Prueba 1 (Compra Exitosa Completa)",
                 comboGamer,
                 "cliente_vip",
-                true,   // garantia
-                true,   // empaque
-                false   // fragil
+                true,   // Poliza de Garantia Extendida
+                true,   // Empaque de Regalo Premium
+                false
         );
 
-        // Demo 2: rechazo por tope de dinero
+        // --------------------------------------------------
+        // Caso de Prueba 2 (Rechazo por Tope de Dinero)
+        // Servidor 6.000.000 + Manejo Prioritario Fragil
+        // --------------------------------------------------
         compra.ejecutarCompraRapida(
-                "Demo 2 - Rechazo por tope",
+                "Caso de Prueba 2 (Rechazo por Tope de Dinero)",
                 new Producto("Servidor Empresarial", 6000000),
                 "cliente_normal",
                 false,
                 false,
-                true    // fragil
+                true    // Manejo Prioritario Fragil
         );
 
-        // Demo 3: rechazo por usuario bloqueado
+        // --------------------------------------------------
+        // Caso de Prueba 3 (Rechazo por Usuario Reportado)
+        // Mouse economico + usuario exactamente "BLOQUEADO"
+        // --------------------------------------------------
         compra.ejecutarCompraRapida(
-                "Demo 3 - Usuario BLOQUEADO",
+                "Caso de Prueba 3 (Rechazo por Usuario Reportado)",
                 new Producto("Mouse", 150000),
                 "BLOQUEADO",
                 false,
