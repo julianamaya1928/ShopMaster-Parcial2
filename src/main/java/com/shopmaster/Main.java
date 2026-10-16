@@ -2,6 +2,8 @@ package com.shopmaster;
 
 import com.shopmaster.catalogo.Combo;
 import com.shopmaster.catalogo.Producto;
+import com.shopmaster.pago.AdaptadorStripe;
+import com.shopmaster.pago.ProcesadorPago;
 import com.shopmaster.pago.StripeUSA;
 import com.shopmaster.pedido.EmpaqueRegalo;
 import com.shopmaster.pedido.GarantiaExtendida;
@@ -42,16 +44,15 @@ public class Main {
         System.out.println("Costo final: $" + (long) pedido.getCosto() + " COP");
         System.out.println();
 
-        // Demo StripeUSA: API externa incompatible con ProcesadorPago
-        // ShopMaster necesita cobrarEnPesos(...); Stripe solo tiene chargeInDollars(...)
-        System.out.println("=== Demo StripeUSA (API externa, sin adapter todavia) ===");
-        StripeUSA stripe = new StripeUSA();
-        stripe.chargeInDollars(100.0, "prueba@shopmaster.com", "mk_test_shopmaster");
+        // Cobro usando el contrato interno, por debajo StripeUSA (Adapter)
+        System.out.println("=== Cobro via Adapter (ProcesadorPago -> StripeUSA) ===");
+        ProcesadorPago procesador = new AdaptadorStripe(new StripeUSA(), "mk_live_shopmaster");
+        procesador.cobrarEnPesos("cliente_vip", pedido.getCosto());
+        System.out.println();
 
         // Demo otro extra
         Pedido pedidoFragil = new PedidoBase(new Producto("Servidor Empresarial", 6000000));
         pedidoFragil = new ManejoFragil(pedidoFragil);
-        System.out.println();
         System.out.println("=== Demo Manejo Fragil ===");
         System.out.println(pedidoFragil.getDescripcion() + " -> $" + (long) pedidoFragil.getCosto());
     }
