@@ -9,4 +9,7 @@ public interface ComponenteCatalogo {
     String getNombre();
 
     double getPrecio();
+
+    // nivel controla la sangria al imprimir el arbol
+    void mostrarDesglose(int nivel);
 }

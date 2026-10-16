@@ -38,4 +38,20 @@ public class Combo implements ComponenteCatalogo {
         }
         return total;
     }
+
+    @Override
+    public void mostrarDesglose(int nivel) {
+        System.out.println(sangria(nivel) + "+ " + nombre + "  $" + (long) getPrecio());
+        for (ComponenteCatalogo componente : componentes) {
+            componente.mostrarDesglose(nivel + 1);
+        }
+    }
+
+    private String sangria(int nivel) {
+        String texto = "";
+        for (int i = 0; i < nivel; i++) {
+            texto = texto + "    ";
+        }
+        return texto;
+    }
 }

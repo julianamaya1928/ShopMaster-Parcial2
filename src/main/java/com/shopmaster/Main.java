@@ -1,13 +1,12 @@
 package com.shopmaster;
 
 import com.shopmaster.catalogo.Combo;
-import com.shopmaster.catalogo.ComponenteCatalogo;
 import com.shopmaster.catalogo.Producto;
 
 public class Main {
 
     public static void main(String[] args) {
-        // Demo temporal del Composite (luego se reemplaza por los 3 casos oficiales)
+        // Demo temporal del desglose Composite (luego se reemplaza por los 3 casos oficiales)
         Producto monitor = new Producto("Monitor", 800000);
         Producto teclado = new Producto("Teclado", 200000);
         Producto limpiaPantallas = new Producto("Limpia pantallas", 25000);
@@ -22,14 +21,9 @@ public class Main {
         comboGamer.agregar(teclado);
         comboGamer.agregar(kitLimpieza);
 
-        System.out.println("=== Demo Composite ===");
-        mostrarPrecio(monitor);
-        mostrarPrecio(kitLimpieza);
-        mostrarPrecio(comboGamer);
-    }
-
-    // Mismo metodo para producto suelto o combo (polimorfismo del Composite)
-    private static void mostrarPrecio(ComponenteCatalogo componente) {
-        System.out.println(componente.getNombre() + " -> $" + (long) componente.getPrecio());
+        System.out.println("=== Desglose del catalogo (Composite) ===");
+        comboGamer.mostrarDesglose(0);
+        System.out.println();
+        System.out.println("Total del combo: $" + (long) comboGamer.getPrecio());
     }
 }
